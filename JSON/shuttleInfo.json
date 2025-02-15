@@ -1,0 +1,55 @@
+{
+	"fileName": "shuttleInfo",
+	"shuttleInfo": [
+		{
+			"shuttleID": "SHUTTLE0001",
+			"boardingTime": 5,
+			"node": "0101"
+		},
+		{
+			"shuttleID": "SHUTTLE0002",
+			"boardingTime": 5,
+			"node": "0701"
+		},
+		{
+			"shuttleID": "SHUTTLE0003",
+			"boardingTime": 5,
+			"node": "0301"
+		},
+		{
+			"shuttleID": "SHUTTLE0004",
+			"boardingTime": 5,
+			"node": "0401"
+		},
+		{
+			"shuttleID": "SHUTTLE0005",
+			"boardingTime": 5,
+			"node": "0501"
+		},
+		{
+			"shuttleID": "SHUTTLE0006",
+			"boardingTime": 5,
+			"node": "0601"
+		},
+		{
+			"shuttleID": "SHUTTLE0007",
+			"boardingTime": 5,
+			"node": "0701"
+		},
+		{
+			"shuttleID": "SHUTTLE0008",
+			"boardingTime": 5,
+			"node": "0801"
+		},
+		{
+			"shuttleID": "SHUTTLE0009",
+			"boardingTime": 5,
+			"node": "0901"
+		},
+		{
+			"shuttleID": "SHUTTLE0010",
+			"boardingTime": 5,
+			"node": "1001"
+		}
+	]
+}
