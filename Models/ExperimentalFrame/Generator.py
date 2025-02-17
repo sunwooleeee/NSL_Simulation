@@ -96,21 +96,24 @@ class Generator(DEVSAtomicModel):
 
 
     
-    #GEN 상태인 경우 WAIT  
+    #내부 천이 분기점 도달 시, 데이터가 존재하면 GEN 상태로 천이, 그것이 아니라면 WAIT 상태로 천이  
     def funcInternalTransition(self):
-        if self.state == "GEN":
-            self.state="WAIT" 
+        if self.data:
+            self.state="GEN" 
             return True
         else:
+            self.state="WAIT"
             return True
-    # GEN 상태의 경우 arrivalTime의 시간만큼 대기 
-    # WAIT 상태의 경우 무한대의 시간동안 대기 
+    # GEN 상태의 경우 승객을 생성하는 시간만큼 대기(정확한 시간을 모르겠어서 일단 2s로 함) -> wallclock 필요 
+    # WAIT 상태의 1초 동안 대기 (데이터가 오기를 기다리는 시간) -> 근데 이렇게 시간 남발을 하면 작동은 할텐데, 이 시간이 흘러가는 2s 동안 시뮬레이션이 안돌아가는거 아닌가?
+    # 그냥 난 wallclock이 시급함 
+ 
     def funcTimeAdvance(self):
         if self.state == "GEN":
-            return 1 # 승객 생성 후 바로 내부천이  
+            return 2 # 승객 생성 후  내부천이  
         else:
             time.sleep(1)
-            return 9999999999 #wait 에서 gen으로의 내부 천이는 불가능 
+            return 2 # wait 에서 gen으로의 내부 천이는 불가능 
         
     def start_server(self):
         self.host="127.0.0.1"
@@ -129,19 +132,18 @@ class Generator(DEVSAtomicModel):
         
         try:
             while True:
-                data=self.client_socket.recv(1024).decode().strip()
+                self.data=self.client_socket.recv(1024).decode().strip()
 
-                if not data:
+                if not self.data:
                     print("연결 종료: 강제 종료")
                     break
                 try:
-                    data = json.loads(data)
+                    data = json.loads(self.data)
                     self.dep_x = data["dep_x"]
                     self.dep_y = data["dep_y"]
                     self.arr_x = data["arr_x"]
                     self.arr_y = data["arr_y"]
                     self.psgrNum = data["psgrNum"]
-                    self.state="GEN"
 
                 except json.JSONDecodeError:
                     print("JSON 파싱 오류, raw_data:", data)
