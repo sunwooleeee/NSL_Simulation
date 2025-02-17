@@ -17,11 +17,13 @@ class CustomerQueue(DEVSAtomicModel):
         self.stateList = ["WAIT", "CALL", "TRANSIT", "ANALYSIS"]
         self.state = self.stateList[0]
 
-        # input Ports
+        # input Ports, inputs=[] 에 str 형식으로 저장 -> 이걸 어떻게 끌어올것인가> 이게 관건, 
+        # 한편, Trasit 이 무엇인지 파악하는 것이 중요  
         self.addInputPort("Passenger")
         self.addInputPort("Transit")
 
         # output Ports
+        # 각각이 의미하는 바가 무엇인지 파악하는 것이 중요 
         self.addOutputPort("Call")
         self.addOutputPort("SimumlationComplete")
         self.addOutputPort("Call_vi")

@@ -15,7 +15,7 @@ class DEVSModel:
         self.states = {}
         self.visualNodes = []
         self.visualEdges = []
-        self.containerModel = None
+        self.containerModel = None #devs 모델을 포함하는 상위 모델이라고 한다, 코드 분석을 더 해볼 필요가 존재한다. 아직 확실히 아는 것은 아님 
 
     def setContainerModel(self, model):
         self.containerModel = model
