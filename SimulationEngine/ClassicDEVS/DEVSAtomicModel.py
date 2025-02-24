@@ -18,7 +18,9 @@ class  DEVSAtomicModel(DEVSModel):
         if self.blnContinue == False:
             self.time = currentTime
             self.execTimeAdvance()
-    # 
+    #여기서 engine은 SimulationEngine을 통해서 얻었을 것이다. 
+    #def addEvent(self,event):
+    #    self.queueEvent.append(event) , self.queueEvent = [Event 객체 삽입]
     def addOutputEvent(self, varOutput, varMessage):
         self.engine.addEvent(Event(self, varOutput, varMessage))
 
