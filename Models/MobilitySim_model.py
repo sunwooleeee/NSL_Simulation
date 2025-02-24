@@ -7,6 +7,8 @@ from Models.ExperimentalFrame.Analyzer import Analyzer
 from Models.ExperimentalFrame.Generator import Generator
 from Models.PhysicalSystem.CustomerQueue import CustomerQueue
 from Models.PhysicalSystem.Shuttle import Shuttle
+from Models.ExperimentalFrame.request_server import recv_request_server
+
 # from Visualizer.Visualizer import Visualizer
 from datetime import datetime
 
@@ -79,12 +81,21 @@ class MobilitySim_model(DEVSCoupledModel):
 
         self.objCustomerQueue = CustomerQueue("CustomerQueue", self.globalVar)
         self.addModel(self.objCustomerQueue)
+
+        self.objrecv_request_server=recv_request_server("recv_request_server",self.globalVar)
+        self.addModel(self.objrecv_request_server)
         
         if maxSim > 1 and isVisualizerOn == True:
             isVisualizerOn = False
             print("MonteCarlo Simulation으로 인한 visualizer는 off 되었습니다.")
         # self.objVisualizer = Visualizer("Visualizer", self.globalVar, isVisualizerOn, jsonPath, self.iter, renderTime, simulationMode)
         # self.addModel(self.objVisualizer)
+
+        
+        #def addCoupling(self, srcModel, srcPort, tarModel, tarPort)
+        #   src모델과 tar모델을 연결하는 함수로, Port를 통해서 연결하도록 한다. 
+        #   이때 모델은 obj<모델명> 구조로 되어 있다 
+
         self.addCoupling(self.objGenerator, "Passenger", self.objCustomerQueue, "Passenger")
         self.addCoupling(self.objDspPpManager, "DispatchRoute_Res", self.objScheduleManager, "DispatchRoute_Res")
         self.addCoupling(self.objScheduleManager, "DispatchRoute_Req", self.objDspPpManager, "DispatchRoute_Req")
@@ -92,6 +103,8 @@ class MobilitySim_model(DEVSCoupledModel):
         self.addCoupling(self.objCustomerQueue, "SimumlationComplete", self.objAnalyzer, "SimumlationComplete")
         self.addCoupling(self.objScheduleManager, "Transit", self.objCustomerQueue, "Transit")
         
+        #추가 원자 모델 
+        self.addCoupling(self.objrecv_request_server,"Request",self.objGenerator,"Request")
         ## init Shuttles ##
         self.objShuttle = []
         for info in shuttleInfo:

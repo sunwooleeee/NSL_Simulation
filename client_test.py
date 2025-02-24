@@ -20,7 +20,7 @@ def send_passenger_data(host, port):
             dep_y = round(random.uniform(1400, 2300), 2) # 출발지 Y 좌표 (임의 범위)
             arr_x = round(random.uniform(1700, 2000), 2) # 도착지 X 좌표 (임의 범위)
             arr_y = round(random.uniform(1900, 2500), 2) # 도착지 Y 좌표 (임의 범위)
-            psgrNum = random.randint(1, 5)              # 승객 수 (1~5 랜덤)
+            psgrNum = random.randint(1, 3)              # 승객 수 (1~5 랜덤)
 
             # 데이터 구성 (JSON 형식)
             data = {
@@ -36,8 +36,9 @@ def send_passenger_data(host, port):
             client_socket.sendall(json_data.encode())
             print(f"[전송] {json_data}")
             
-            # 1초 대기 (지속 송신)
-            time.sleep(3)
+            time.sleep(1)
+            # 초 대기 (지속 송신)
+            
     
     except KeyboardInterrupt:
         print("\n사용자 종료 요청. 클라이언트를 종료합니다.")
