@@ -49,6 +49,7 @@ class recv_request_server(DEVSAtomicModel):
                 break
 
         self.server_socket.close()
+        self.state=self.stateList[1]
 
     def handle_client(self, client_socket, addr):
         """
@@ -87,4 +88,7 @@ class recv_request_server(DEVSAtomicModel):
             return False
 
     def funcTimeAdvance(self):
-        return 1
+        if self.state=="OPEN":
+            return 1
+        else:
+            return 99999999999
