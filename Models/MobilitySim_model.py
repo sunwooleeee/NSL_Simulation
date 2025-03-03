@@ -69,7 +69,7 @@ class MobilitySim_model(DEVSCoupledModel):
         self.addModel(self.objAnalyzer)
         self.prevAnalysisModel = self.objAnalyzer
         
-
+        #원자 모델 선언 
         self.objGenerator = Generator("Generator", self.globalVar, EDService, EDServiceRate, genEndTime, psgrPercent)
         self.addModel(self.objGenerator)
         
@@ -105,6 +105,8 @@ class MobilitySim_model(DEVSCoupledModel):
         
         #추가 원자 모델 
         self.addCoupling(self.objrecv_request_server,"Request",self.objGenerator,"Request")
+
+        
         ## init Shuttles ##
         self.objShuttle = []
         for info in shuttleInfo:
