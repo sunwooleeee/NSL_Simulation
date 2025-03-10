@@ -22,7 +22,7 @@ class Generator(DEVSAtomicModel):
         # GEN-RQ는 요청 기반 수동 승객생성 
         # IDLE은 승객을 생성하지 않는 상태 
         self.stateList = ["GEN_P","GEN_RQ","IDLE"] # 상태 리스트 
-        self.state = self.stateList[2] # 처음 상태를 확률 기반 승객 생성 상태로 설정 
+        self.state = self.stateList[0] # 처음 상태를 확률 기반 승객 생성 상태로 설정 
 
        
         # input Ports
@@ -87,7 +87,7 @@ class Generator(DEVSAtomicModel):
         self.hourly_ratios = self.load_time_ratios()
 
         #simulate_passenger_arrivals: 승객들의 도착시간을 반환하여 timeTable에 저장한다. 이때 time_table은 오름차순으로 정렬 
-        self.timeTable = self.simulate_passenger_arrivals(self.hourly_ratios, 5)  # 승객 수 조절 
+        self.timeTable = self.simulate_passenger_arrivals(self.hourly_ratios, 50)  # 승객 수 조절 
         #process_demand_data
         #x	y	00_승차	00_하차	01_승차	01_하차	02_승차	02_하차	03_승차	03_하차	...	23_승차	23_하차
         #1766	1416	0.0022	0.0001	0.0001	0.0022	0.0244	0.0001	0.0200	0.0022	...	0.0001	0.0001
@@ -282,10 +282,10 @@ class Generator(DEVSAtomicModel):
             return self.arrivalTime   
         
         elif self.state=="GEN_RQ":
-            return 1
+            return 0
         
         elif self.state=="IDLE":
-            return 1 # 원래는 무한대로 해야 하는데, wallclock문제로 10으로 해놓았다 
+            return 9999999 # 원래는 무한대로 해야 하는데, wallclock문제로 10으로 해놓았다 
         
 
             

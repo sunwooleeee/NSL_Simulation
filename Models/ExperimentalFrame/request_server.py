@@ -87,8 +87,9 @@ class recv_request_server(DEVSAtomicModel):
             print("CurrentState: {}".format(self.state))
             return False
 
+
     def funcTimeAdvance(self):
         if self.state=="OPEN":
-            return 1
+            return 9999999999
         else:
             return 99999999999

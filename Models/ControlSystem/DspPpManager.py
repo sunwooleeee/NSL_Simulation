@@ -145,7 +145,7 @@ class DspPpManager(DEVSAtomicModel):
                         w_waiting=0.3   # 기존 승객에 대한 가중치
                     )
 
-                    # 가장 높은 만족도를 가진 차량 선택
+                    # 가장 높은 만족도를 가진 차량 선택,하한값 존재,  
                     if total_satisfaction > maxTotalSatisfaction and scheduledic[shuttle_id].newPsgrWaitTime < 600:
                         maxTotalSatisfaction = total_satisfaction
                         bestShuttleID = shuttle_id
