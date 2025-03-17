@@ -87,7 +87,7 @@ class Generator(DEVSAtomicModel):
         self.hourly_ratios = self.load_time_ratios()
 
         #simulate_passenger_arrivals: 승객들의 도착시간을 반환하여 timeTable에 저장한다. 이때 time_table은 오름차순으로 정렬 
-        self.timeTable = self.simulate_passenger_arrivals(self.hourly_ratios, 50)  # 승객 수 조절 
+        self.timeTable = self.simulate_passenger_arrivals(self.hourly_ratios, 100)  # 승객 수 조절 
         #process_demand_data
         #x	y	00_승차	00_하차	01_승차	01_하차	02_승차	02_하차	03_승차	03_하차	...	23_승차	23_하차
         #1766	1416	0.0022	0.0001	0.0001	0.0022	0.0244	0.0001	0.0200	0.0022	...	0.0001	0.0001
@@ -103,6 +103,7 @@ class Generator(DEVSAtomicModel):
         if strPort=="Request":
             data=objEvent
             self.RQpassengerlst.append(data)
+            self.globalVar.printTerminal("######################데이터를 받음 ############################")
             self.state="GEN_RQ"
             return True
         else:
@@ -111,9 +112,9 @@ class Generator(DEVSAtomicModel):
     #fcunExternalTransition에서 얻어온 값을 가지고 승객 객체를 만든 후 해당 값을 queue에 넣어야한다. 
     # 혹은 init에서 초기화한 서버를 통해서 값을 가져와야한다. 
     def funcOutput(self):
-        time.sleep(1)
+        time.sleep(5)
         if self.state == "GEN_RQ":
-            self.globalVar.printTerminal("받은 데이터 처리 확인")
+            self.globalVar.printTerminal("######################받은 데이터 처리 확인############################")
             data=self.RQpassengerlst.pop(0)
             self.dep_x = data["dep_x"]
             self.dep_y = data["dep_y"]
@@ -122,7 +123,7 @@ class Generator(DEVSAtomicModel):
             self.psgrNum = data["psgrNum"]
             self.psgrID = self.psgrID + 1   #psgr을 하나씩 뽑아낼때마다 id의 값을 1씩 증가시킨다 
             self.psgrCount = self.psgrCount + self.psgrNum #psgr count 지금까지의 누적 승객 수 계산 
-
+            is_auto_generated=False
             ## 사용 안할거임 오류 방지를 위해서 남겨놓은 것 
             psgrEDS = False
             
@@ -131,8 +132,9 @@ class Generator(DEVSAtomicModel):
             arr_node = self.globalVar.find_nearest_nodes(self.arr_x, self.arr_y)
             arr_node = arr_node[0] #arr_node는 리스트 형식으로 노드와 가장 가까운 애들부터 정렬되어있다. 이 중 가장 가까운 노드가 [0] 에 있다
 
-            # 전역변수 psgrwaitingqueue에 승객 객체를 넣어서 대기하도록 한다. 
-            self.globalVar.setTargetPsgr(self.psgrID, self.psgrNum, dep_node, arr_node, psgrEDS, self.getTime())
+            # 전역변수 psgrwaitingqueue에 승객 객체를 넣어서 대기하도록 한다. 여기서 passenger class를 호출해서 승객 객체를 만든다. 
+
+            self.globalVar.setTargetPsgr(self.psgrID, self.psgrNum, dep_node, arr_node, psgrEDS, self.getTime(),is_auto_generated)
                 
             #데이터 저장을 위한 코드 
             if self.globalVar.isDBsave == True:
@@ -203,7 +205,7 @@ class Generator(DEVSAtomicModel):
                 dep_node = self.globalVar.add_dynamic_node(dep_x, dep_y)
                 arr_node = self.globalVar.find_nearest_nodes(arr_x, arr_y)
                 arr_node = arr_node[0]
-
+                is_auto_generated=True
                 # org_node_lst = self.globalVar.getNearestNode(dep_node, 10)
                 
 
@@ -211,7 +213,7 @@ class Generator(DEVSAtomicModel):
                 #   self.psgrWaitingQueue[psgrID] = Passenger(psgrID, psgrNum, DNode, ANode, psgrEDS, time)
                 #self.psgrWaitingQueue={} 이고 key=psgrID,value:Passenger, 여기서 Passenger는 승객 객체, GlobalVar.py에서 확인 가능 
                 # 즉 전역변수 psgrwaitingqueue에 승객 객체를 넣어서 대기하도록 한다. 
-                self.globalVar.setTargetPsgr(self.psgrID, psgrNum, dep_node, arr_node, psgrEDS, self.getTime())
+                self.globalVar.setTargetPsgr(self.psgrID, psgrNum, dep_node, arr_node, psgrEDS, self.getTime(),is_auto_generated)
                 
                 #데이터 저장을 위한 코드 
                 if self.globalVar.isDBsave == True:

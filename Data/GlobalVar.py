@@ -53,10 +53,11 @@ class GlobalVar:
         return self.shuttleInfo[str(ID)]   
     
     ## function for PSGR information ##   
-    def setTargetPsgr(self, psgrID, psgrNum, DNode, ANode, psgrEDS, time):
-        self.psgrWaitingQueue[psgrID] = Passenger(psgrID, psgrNum, DNode, ANode, psgrEDS, time)
+    def setTargetPsgr(self, psgrID, psgrNum, DNode, ANode, psgrEDS, time,is_auto_generated):
+        self.psgrWaitingQueue[psgrID] = Passenger(psgrID, psgrNum, DNode, ANode, psgrEDS, time,is_auto_generated)
     def getPsgrInfoByID(self, psgrID):
         psgr = None
+        ## psgrWaitingQueue 는 generator에서 만들어진 객체가 대기하는 위치이다. 
         if psgrID in self.psgrWaitingQueue:
             psgr = self.psgrWaitingQueue[psgrID]
         elif psgrID in self.psgrRidingQueue:
@@ -329,7 +330,7 @@ class Passenger:
     # ANode : 승객 그룹이 도착하는 위치 
     # psgrEDS : 우선 처리 요소를 적용할것인지의 불린값, 우리는 false로 사용
     # time : 승객이 호출하는 현재 시간 
-    def __init__(self, psgrID, psgrNum, DNode, ANode, psgrEDS, time):
+    def __init__(self, psgrID, psgrNum, DNode, ANode, psgrEDS, time,is_auto_generated):
         self.psgrID = int(psgrID)
         self.strState = "WAIT"
         self.waitingStartTime = time
@@ -347,6 +348,7 @@ class Passenger:
         self.pathChanged = 0
         self.increasedTime = 0
         self.shuttle_Fail = False
+        self.is_auto_generated=is_auto_generated
     # 마지막 탑승자는 lastPsgr=True로 하고 이게 다른 요소의 트리거가 되어 작업이 종료되나봄    
     def setlastPsgr(self):
         self.lastPsgr = True

@@ -36,7 +36,7 @@ class CustomerQueue(DEVSAtomicModel):
         #  self.ouputs=['Call','SimulationComplete,Call_vi'] 
         self.addOutputPort("Call")
         self.addOutputPort("SimumlationComplete")
-        self.addOutputPort("Call_vi")
+        
         
 
         # self variables
@@ -46,9 +46,9 @@ class CustomerQueue(DEVSAtomicModel):
         self.addStateVariable("strID", strID)
    
         # variables
-        self.passengerlst = []
-        self.transitlst = []
-        self.endPsgr = 0
+        self.passengerlst = [] #승객 리스트, 호출은 했지만 아직 처리되지 못한 승객이 기다리는 곳 (generator에서 온 값)
+        self.transitlst = [] # 아마 shuttle에서 전달된 transit값이 저장되는 큐이다. 
+        self.endPsgr = 0 
         self.simDone = False
 
 
@@ -105,7 +105,7 @@ class CustomerQueue(DEVSAtomicModel):
                 #else:
                 #    print("psgrID is not existe")
                 #return psgr
-            # 조건에 해당하는 큐에 승객 객체를 삽입한다. 
+            # generator에서 승객을 생성 후 psgrWaitingQueue를 만들어서 key:승객id value:Passenger 객체 를 저장해놓았고 그에 대한 승객 객체를 wait 상태로 천이 (default가 wait이긴 하다.) 
             psgr = self.globalVar.getPsgrInfoByID(currentPsgrId)
 
             #def setTime(self, currentTime):

@@ -105,6 +105,7 @@ class MobilitySim_model(DEVSCoupledModel):
         
         #추가 원자 모델 
         self.addCoupling(self.objrecv_request_server,"Request",self.objGenerator,"Request")
+        self.addCoupling(self.objDspPpManager,"Result_Notification",self.objrecv_request_server,"Result_Notification")
 
         
         ## init Shuttles ##

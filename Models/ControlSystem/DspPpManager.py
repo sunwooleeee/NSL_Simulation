@@ -36,6 +36,7 @@ class DspPpManager(DEVSAtomicModel):
 
         # output Ports
         self.addOutputPort("DispatchRoute_Res")
+        self.addOutputPort("Result_Notification")
         
 
         # self variables
@@ -153,6 +154,10 @@ class DspPpManager(DEVSAtomicModel):
 
                 if bestShuttleID is not None :
                     self.addOutputEvent("DispatchRoute_Res", scheduledic[bestShuttleID])
+                    ## 배차에 성공한 경우 성공 메시지 전달 및 배차 차량 id 전달(bestShittleID)
+                    if targetPsgr.is_auto_generated==False:    
+                        Result={"is_assigned_shuttle":True,"shuttle_id":bestShuttleID}
+                        self.addOutputEvent("Result_Notification",Result) 
                     self.scheduleID = self.scheduleID+1
                     scheduledic[bestShuttleID].scheduleID = '{:03}'.format(self.scheduleID)
                     self.globalVar.printTerminal("[{}][{}] {} start #{} to #{}".format(self.getTime(), self.getStateValue("strID"),  bestShuttleID, targetShuttledic[bestShuttleID].curNode, scheduledic[bestShuttleID].strDepartureNode))
@@ -160,6 +165,10 @@ class DspPpManager(DEVSAtomicModel):
                     if Suttle_fail_check == True:
                         targetPsgr.shuttle_Fail = True
                     self.addOutputEvent("DispatchRoute_Res", targetPsgr.psgrID)
+                    ## 배차에 실패한 경우 실패 메시지 전달 
+                    if targetPsgr.is_auto_generated==False:    
+                        Result={"is_assigned_shuttle":False}
+                        self.addOutputEvent("Result_Notification",Result)
                     self.globalVar.printTerminal("[{}][{}] Dispatching of Passenger #{} failed".format(self.getTime(), self.getStateValue("strID"),  targetPsgr.psgrID))
                 
                 self.DSPlst.pop(0)
