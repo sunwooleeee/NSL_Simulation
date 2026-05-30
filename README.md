@@ -1,2 +1,2 @@
 # NSL_Simulation
-Wall Time Simulation Module fot Capstone Design in 2025
+Wall Time Simulation Module for Capstone Design in 2025
