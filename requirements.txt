@@ -1,0 +1,9 @@
+numpy
+pandas
+scipy
+networkx
+matplotlib
+dtaidistance
+frechetdist
+psycopg2-binary
+openpyxl
