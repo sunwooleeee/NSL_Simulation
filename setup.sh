@@ -1,5 +1,3 @@
-#!/bin/bash
-
 sudo apt-get update
 sudo apt-get install -y build-essential python3-dev libpq-dev postgresql postgresql-contrib sysstat blktrace
 
